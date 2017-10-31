@@ -5,8 +5,8 @@
 ---
 
 今天有同事问”Spring Boot依赖的Embedded的Tomcat能不能同时监听多个端口？“
-非Embedded当然是可以的，Tomcat的架构中，一个Connecter监听一个端口。
-如果是独立的Tomcat，只需要在server.xml中添加一个<connector>即可，如下：
+stand-alone的tomcat当然是可以的，Tomcat的架构中，一个Connecter监听一个端口。
+如果是stand-alone的Tomcat，只需要在server.xml中添加一个<connector>即可，如下：
 ```xml
 <Connector port="8080" redirectPort="8443" acceptCount="100" debug="0" connectionTimeout="20000" />
 <Connector port="8081" redirectPort="8443" acceptCount="100" debug="0" connectionTimeout="20000" />
@@ -15,7 +15,7 @@
 上面配置了3个Connector，分别监听 8080，8081，8082 3个端口。
 
 Spring Boot使用了Embedded Tomcat，同时提供了EmbeddedServletContainerCustomizer接口让用户对各种EmbeddedServletContainer进行配置。
-改接口只要一个方法：
+该接口只要一个方法：
 ```java
 public void customize(
 			ConfigurableEmbeddedServletContainer configurableEmbeddedServletContainer)
@@ -67,7 +67,7 @@ public class TomcatConfigApplication implements EmbeddedServletContainerCustomiz
 启动日志里会显示
 2017-10-31 21:48:14.961  INFO 81863 --- [           main] s.b.c.e.t.TomcatEmbeddedServletContainer : Tomcat started on port(s): 8080 (http) 8081 (http) 8082 (http) 8083 (http)
 
-再用curl分别请求这三个端口
+再用curl分别请求这三个端口，如下图请求都是成功的
 ![curl][2]
 
 TomcatEmbeddedServletContainerFactory还可以配置Tomcat其他很多属性，详情参考api。
